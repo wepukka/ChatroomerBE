@@ -1,6 +1,6 @@
 var axios = require("axios");
 
-async function HarperSaveUser(username, hash) {
+function HarperSaveUser(username, hash) {
   const dbUrl = process.env.HARPERDB_URL;
   const dbPw = process.env.HARPERDB_PW;
   if (!dbUrl || !dbPw) return null;
@@ -32,7 +32,7 @@ async function HarperSaveUser(username, hash) {
       .then(function (response) {
         resolve(JSON.stringify(response.data));
       })
-      .catch(function (error) {
+      .catch((error) => {
         reject(error);
       });
   });
