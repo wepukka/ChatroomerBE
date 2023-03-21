@@ -1,5 +1,7 @@
 const express = require("express");
 const authRouter = express.Router();
+authRouter.use(express.json());
+authRouter.use(express.urlencoded());
 
 // Middleware
 const { verifyAccessToken } = require("../middlewares/verifyAccessToken");
@@ -29,7 +31,7 @@ authRouter.post("/register/", async (req, res) => {
     let harperUser = await HarperGetUser(user);
 
     if (harperUser !== undefined) {
-      return res.status(404).send({
+      return res.send({
         success: false,
         msg: "Username taken",
       });
@@ -43,9 +45,8 @@ authRouter.post("/register/", async (req, res) => {
 
     // Success
     res.status(200).send({
-      token: generateAccessToken(user),
       success: true,
-      username: user,
+      payload: { user: user, token: generateAccessToken(user) },
     });
   } catch (err) {
     res.status(404).send({
@@ -65,7 +66,7 @@ authRouter.post("/login/", async (req, res) => {
     let harperUser = await HarperGetUser(user);
 
     if (harperUser === undefined) {
-      return res.status(404).send({
+      return res.send({
         success: false,
         msg: "Invalid login",
       });
@@ -85,8 +86,7 @@ authRouter.post("/login/", async (req, res) => {
     // Success
     return res.status(200).send({
       success: true,
-      user: user.username,
-      accessToken: generateAccessToken(user),
+      payload: { user: user, token: generateAccessToken(user) },
     });
   } catch (err) {
     return res.send({
@@ -99,8 +99,10 @@ authRouter.post("/login/", async (req, res) => {
 // Authenticate
 authRouter.post("/authenticate", verifyAccessToken, async (req, res) => {
   res.status(200).send({
-    user: req.user,
     success: true,
+    data: {
+      user: req.user,
+    },
   });
 });
 

@@ -4,12 +4,12 @@ const app = express();
 http = require("http");
 const cors = require("cors");
 const SocketServer = require("./socket");
-const authRouter = require("./routes/auth");
-const defaultRouter = require("./routes/default");
 
+// Routes
 app.use(cors()); // Add cors middleware
+const defaultRouter = require("./routes/default");
+const authRouter = require("./routes/auth");
 
-//
 const server = http.createServer(app);
 SocketServer(server);
 
