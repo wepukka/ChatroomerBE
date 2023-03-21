@@ -9,11 +9,13 @@ const SocketServer = require("./socket");
 app.use(cors()); // Add cors middleware
 const defaultRouter = require("./routes/default");
 const authRouter = require("./routes/auth");
+const dataRouter = require("./routes/data");
 
 const server = http.createServer(app);
 SocketServer(server);
 
 app.use("/", defaultRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/data", dataRouter);
 
 server.listen(4000, () => "Server is running on port 4000");
