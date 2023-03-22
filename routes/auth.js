@@ -100,7 +100,7 @@ authRouter.post("/login/", async (req, res) => {
 authRouter.post("/authenticate", verifyAccessToken, async (req, res) => {
   res.status(200).send({
     success: true,
-    data: {
+    payload: {
       user: req.user,
     },
   });
