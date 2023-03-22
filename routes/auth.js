@@ -77,7 +77,7 @@ authRouter.post("/login/", async (req, res) => {
 
     // Invalid password
     if (!validPassword) {
-      return res.status(404).send({
+      return res.send({
         success: false,
         msg: "Invalid login",
       });

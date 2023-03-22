@@ -1,19 +1,18 @@
 var axios = require("axios");
 
-function HarperSaveUser(username, hash) {
+function harperUpdateUserRooms(id, rooms) {
   const dbUrl = process.env.HARPERDB_URL;
   const dbPw = process.env.HARPERDB_PW;
   if (!dbUrl || !dbPw) return null;
 
   var data = JSON.stringify({
-    operation: "insert",
+    operation: "update",
     schema: "chat_app",
     table: "users",
     records: [
       {
-        username,
-        hash,
-        rooms: [],
+        id: id,
+        rooms: rooms,
       },
     ],
   });
@@ -39,4 +38,4 @@ function HarperSaveUser(username, hash) {
   });
 }
 
-module.exports = HarperSaveUser;
+module.exports = harperUpdateUserRooms;
