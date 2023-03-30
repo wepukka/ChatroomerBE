@@ -20,6 +20,7 @@ function SocketServer(server) {
   // Listen for when the client connects via socket.io-client
   io.on("connection", (socket) => {
     console.log(`User connected ${socket.id}`);
+    socket.emit("all_users", allUsers);
 
     // Add a user to a room
     socket.on("join_room", (data) => {
@@ -34,12 +35,6 @@ function SocketServer(server) {
         __createdtime__,
       });
 
-      socket.emit("receive_message", {
-        message: `Welcome ${username}`,
-        username: CHAT_BOT,
-        __createdtime__,
-      });
-
       chatRoom = room;
 
       // Show current users in the room
@@ -50,7 +45,15 @@ function SocketServer(server) {
 
       harperGetMessages(room)
         .then((last1000Messages) => {
-          /*  console.log("latest messages", last1000Messages); */
+          //
+          // If no messages in the room, inform user
+          if (JSON.parse(last1000Messages).length === 0) {
+            socket.emit("receive_message", {
+              message: "No messages in this room, be the first one to chat!",
+              username: CHAT_BOT,
+              __createdtime__,
+            });
+          }
           socket.emit("last_1000_messages", last1000Messages);
         })
         .catch((err) => console.log(err));
